@@ -1,24 +1,33 @@
-import { useCallback } from "react";
+import { trpc } from "@/lib/trpc";
+import { useCallback, useMemo } from "react";
 
 export function useAuth() {
-  const user = {
-    id: 1,
-    openId: "local-admin",
-    name: "Administrador",
-    email: "admin@ecobairro.com",
-    role: "admin",
-  };
+  const meQuery = trpc.auth.me.useQuery(undefined, {
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
 
   const logout = useCallback(async () => {
-    console.log("Logout local");
+    console.log("Logout desabilitado no modo sem autenticação");
   }, []);
 
+  const state = useMemo(() => {
+    return {
+      user: meQuery.data ?? {
+        id: 1,
+        name: "Usuário EcoBairro",
+        email: "usuario@ecobairo.com.br",
+        role: "admin",
+      },
+      loading: meQuery.isLoading,
+      error: null,
+      isAuthenticated: true,
+    };
+  }, [meQuery.data, meQuery.isLoading]);
+
   return {
-    user,
-    loading: false,
-    error: null,
-    isAuthenticated: true,
-    refresh: async () => {},
+    ...state,
+    refresh: () => meQuery.refetch(),
     logout,
   };
 }

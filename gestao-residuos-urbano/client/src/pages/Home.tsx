@@ -1,22 +1,17 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { getLoginUrl } from "@/const";
-import { Leaf, MapPin, Users, TrendingUp, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Leaf, ArrowRight, MapPin, Users, TrendingUp, CheckCircle2 } from "lucide-react";
 import { useLocation } from "wouter";
 
 export default function Home() {
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
   const [, setLocation] = useLocation();
 
   const handleGetStarted = () => {
-    if (isAuthenticated) {
-      if (user?.role === "morador") {
-        setLocation("/morador/dashboard");
-      } else if (user?.role === "prefeitura" || user?.role === "cooperativa") {
-        setLocation("/admin/dashboard");
-      }
+    if (user?.role === "morador") {
+      setLocation("/morador/dashboard");
     } else {
-      setLocation("/profile-selection");
+      setLocation("/admin/dashboard");
     }
   };
 
@@ -30,20 +25,9 @@ export default function Home() {
             <span className="text-2xl font-bold text-green-700">EcoBairro</span>
           </div>
           <div className="flex gap-3">
-            {isAuthenticated ? (
-              <Button onClick={() => setLocation("/morador/dashboard")} variant="default">
-                Acessar Plataforma
-              </Button>
-            ) : (
-              <>
-                <Button variant="outline" onClick={() => window.location.href = getLoginUrl()}>
-                  Entrar
-                </Button>
-                <Button onClick={() => window.location.href = getLoginUrl()} className="bg-green-600 hover:bg-green-700">
-                  Cadastrar
-                </Button>
-              </>
-            )}
+            <Button onClick={handleGetStarted} className="bg-green-600 hover:bg-green-700">
+              Acessar Plataforma
+            </Button>
           </div>
         </div>
       </nav>
@@ -101,7 +85,6 @@ export default function Home() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1 */}
             <div className="p-8 rounded-lg border border-green-100 hover:border-green-300 transition-colors">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <MapPin className="w-6 h-6 text-green-600" />
@@ -112,172 +95,69 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Feature 2 */}
             <div className="p-8 rounded-lg border border-green-100 hover:border-green-300 transition-colors">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <Users className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Mapa de Pontos de Descarte</h3>
               <p className="text-gray-600">
-                Encontre os ecopontos mais próximos para cada tipo de resíduo (eletrônicos, pilhas, óleo, etc).
+                Encontre os ecopontos mais próximos para cada tipo de resíduo.
               </p>
             </div>
 
-            {/* Feature 3 */}
             <div className="p-8 rounded-lg border border-green-100 hover:border-green-300 transition-colors">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <Leaf className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Educação Ambiental</h3>
               <p className="text-gray-600">
-                Acesse dicas e conteúdo sobre como separar resíduos corretamente e benefícios da reciclagem.
+                Acesse dicas e conteúdo sobre como separar resíduos corretamente.
               </p>
             </div>
 
-            {/* Feature 4 */}
             <div className="p-8 rounded-lg border border-green-100 hover:border-green-300 transition-colors">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <TrendingUp className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Painel de Métricas</h3>
               <p className="text-gray-600">
-                Acompanhe o volume de material coletado e o impacto da comunidade em tempo real.
+                Acompanhe o volume de material coletado e o impacto da comunidade.
               </p>
             </div>
 
-            {/* Feature 5 */}
             <div className="p-8 rounded-lg border border-green-100 hover:border-green-300 transition-colors">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <CheckCircle2 className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Histórico de Coletas</h3>
               <p className="text-gray-600">
-                Visualize seu histórico de agendamentos e acompanhe o status de cada coleta realizada.
+                Visualize seu histórico de agendamentos e acompanhe o status de cada coleta.
               </p>
             </div>
 
-            {/* Feature 6 */}
             <div className="p-8 rounded-lg border border-green-100 hover:border-green-300 transition-colors">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <Users className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Painel Administrativo</h3>
               <p className="text-gray-600">
-                Prefeitura e cooperativas gerenciam agendamentos e acessam relatórios de desempenho.
+                Prefeitura e cooperativas gerenciam agendamentos e acessam relatórios.
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="bg-green-50 py-20">
-        <div className="container max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
-            Como Funciona
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                1
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Cadastre-se</h3>
-              <p className="text-gray-600">
-                Crie sua conta como Morador, Prefeitura ou Cooperativa
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                2
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Agende</h3>
-              <p className="text-gray-600">
-                Solicite a coleta de seus recicláveis com poucos cliques
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                3
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Colete</h3>
-              <p className="text-gray-600">
-                Receba a coleta no dia e horário agendados
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                4
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Impacte</h3>
-              <p className="text-gray-600">
-                Veja o impacto da sua ação na comunidade
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-green-600 text-white py-16">
-        <div className="container max-w-6xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            Pronto para fazer a diferença?
-          </h2>
-          <p className="text-xl mb-8 opacity-90">
-            Junte-se à comunidade EcoBairro e ajude a transformar seu bairro em um espaço mais sustentável.
-          </p>
-          <Button 
-            onClick={handleGetStarted}
-            size="lg"
-            className="bg-white text-green-600 hover:bg-green-50 text-lg px-8"
-          >
-            Comece Agora <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="container max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Leaf className="w-6 h-6 text-green-500" />
-                <span className="text-xl font-bold text-white">EcoBairro</span>
-              </div>
-              <p className="text-sm">
-                Transformando bairros em comunidades sustentáveis através da gestão inteligente de resíduos.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Produto</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-green-500 transition">Funcionalidades</a></li>
-                <li><a href="#" className="hover:text-green-500 transition">Preços</a></li>
-                <li><a href="#" className="hover:text-green-500 transition">Segurança</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Empresa</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-green-500 transition">Sobre</a></li>
-                <li><a href="#" className="hover:text-green-500 transition">Blog</a></li>
-                <li><a href="#" className="hover:text-green-500 transition">Contato</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-green-500 transition">Privacidade</a></li>
-                <li><a href="#" className="hover:text-green-500 transition">Termos</a></li>
-                <li><a href="#" className="hover:text-green-500 transition">Cookies</a></li>
-              </ul>
-            </div>
+        <div className="container max-w-6xl mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Leaf className="w-6 h-6 text-green-500" />
+            <span className="text-xl font-bold text-white">EcoBairro</span>
           </div>
+          <p className="text-sm mb-8">
+            Transformando bairros em comunidades sustentáveis através da gestão inteligente de resíduos.
+          </p>
           <div className="border-t border-gray-800 pt-8 text-center text-sm">
             <p>&copy; 2026 EcoBairro. Todos os direitos reservados.</p>
           </div>
